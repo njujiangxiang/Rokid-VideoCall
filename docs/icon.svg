@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景圆 -->
+  <circle cx="50" cy="50" r="48" fill="url(#grad1)"/>
+  
+  <!-- 眼镜轮廓 -->
+  <g fill="none" stroke="white" stroke-width="3" stroke-linecap="round">
+    <!-- 左镜片 -->
+    <ellipse cx="35" cy="50" rx="12" ry="10"/>
+    <!-- 右镜片 -->
+    <ellipse cx="65" cy="50" rx="12" ry="10"/>
+    <!-- 鼻梁 -->
+    <path d="M 47 50 Q 50 53 53 50"/>
+    <!-- 镜腿 -->
+    <path d="M 23 50 L 10 45"/>
+    <path d="M 77 50 L 90 45"/>
+  </g>
+  
+  <!-- 视频录制指示点 -->
+  <circle cx="70" cy="35" r="4" fill="#ff4444"/>
+  
+  <!-- WiFi 信号 -->
+  <path d="M 45 70 Q 50 75 55 70" stroke="white" stroke-width="2" fill="none" opacity="0.8"/>
+  <path d="M 40 75 Q 50 85 60 75" stroke="white" stroke-width="2" fill="none" opacity="0.6"/>
+</svg>

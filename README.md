@@ -241,7 +241,7 @@ Rokid-VideoCall/
 MIT License
 
 ```
-Copyright (c) 2026 江翔
+Copyright (c) 2026 小雨爸爸
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -258,8 +258,8 @@ copies or substantial portions of the Software.
 
 ## 👨‍💻 作者
 
-**江翔**  
-📧 nju.jiangxiang@gmail.com  
+**小雨爸爸**  
+📧 xiaoyu.dad@gmail.com  
 🔗 [GitHub](https://github.com/njujiangxiang)
 
 ---

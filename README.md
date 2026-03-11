@@ -1,23 +1,24 @@
-# 🦞 Rokid Glasses 远程视频连线系统
+# 🥽 Rokid Glasses 远程视频连线系统
 
-> AI 眼镜应用 Demo
+> 基于 WebRTC 的 AR 眼镜实时音视频通话解决方案
 
-![版本](https://img.shields.io/badge/版本 -1.0.0-blue)
+![版本](https://img.shields.io/badge/版本-1.0.0-blue)
 ![Python](https://img.shields.io/badge/Python-3.10+-green)
 ![Android](https://img.shields.io/badge/Android-8.0+-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
+![Stars](https://img.shields.io/github/stars/njujiangxiang/Rokid-VideoCall)
 
 ---
 
 ## 📋 项目概述
 
-本系统实现了后端专家与佩戴 Rokid Glasses 的现场巡检人员之间的**实时视频连线**功能，支持：
+本系统实现了后端专家与佩戴 Rokid Glasses 的现场人员之间的**实时视频连线**功能，支持：
 
-- ✅ **实时视频流**：后端可调取眼镜摄像头画面
-- ✅ **双向音频**：后端与现场人员语音通话
-- ✅ **低延迟**：WebRTC 技术，端到端延迟 < 300ms
-- ✅ **设备控制**：切换摄像头、音量调节、拍照等
-- ✅ **会话管理**：完整的通话记录和管理后台
+- ✅ **实时视频流** - 后端可调取眼镜摄像头画面
+- ✅ **双向音频** - 后端与现场人员语音通话（延迟 < 150ms）
+- ✅ **低延迟** - WebRTC 技术，端到端延迟 < 300ms
+- ✅ **设备控制** - 切换摄像头、音量调节、拍照等
+- ✅ **会话管理** - 完整的通话记录和管理后台
 
 ---
 
@@ -34,41 +35,6 @@
                                            │ Rokid Glasses   │
                                            │  (CXR-S SDK)    │
                                            └─────────────────┘
-```
-
----
-
-## 📁 项目结构
-
-```
-Rokid-VideoCall-Demo/
-├── README.md                      # 本文件
-├── docs/                          # 文档目录
-│   └── 技术方案文档.md             # 详细技术方案
-├── android-app/                   # Android 客户端
-│   ├── README.md                  # Android 开发指南
-│   ├── app/
-│   │   ├── src/main/
-│   │   │   ├── java/com/rokid/videocall/
-│   │   │   │   ├── MainActivity.kt
-│   │   │   │   ├── RokidManager.kt
-│   │   │   │   ├── WebRTCManager.kt
-│   │   │   │   └── SignalingClient.kt
-│   │   │   ├── res/               # 资源文件
-│   │   │   └── AndroidManifest.xml
-│   │   └── build.gradle.kts
-│   └── settings.gradle.kts
-├── backend-server/                # 后端服务器
-│   ├── start.sh                   # 启动脚本
-│   ├── requirements.txt           # Python 依赖
-│   ├── app/
-│   │   ├── main.py                # FastAPI 入口
-│   │   ├── signaling/             # 信令处理
-│   │   ├── webrtc/                # WebRTC 处理
-│   │   └── models/                # 数据模型
-│   └── static/
-│       └── index.html             # Web 管理后台
-└── scripts/                       # 辅助脚本
 ```
 
 ---
@@ -92,15 +58,13 @@ python -m uvicorn main:app --host 0.0.0.0 --port 8765 --reload
 ```
 
 **访问地址**：
-- Web 管理后台：http://localhost:8765
-- WebSocket 信令：ws://localhost:8765/ws/signaling/{session_id}
-- REST API: http://localhost:8765/api/sessions
+- 🌐 Web 管理后台：http://localhost:8765
+- 🔌 WebSocket 信令：ws://localhost:8765/ws/signaling/{session_id}
+- 📡 REST API: http://localhost:8765/api/sessions
 
 ### 2. Android 客户端编译
 
 ```bash
-cd android-app
-
 # 1. 下载 Rokid CXR-M SDK
 # 访问 https://ar.rokid.com/sdk 下载 SDK 并放到 app/libs/ 目录
 
@@ -115,28 +79,41 @@ cd android-app
 # Build -> Build Bundle(s) / APK(s) -> Build APK(s)
 ```
 
-### 3. 测试流程
+---
 
-1. **启动后端服务器**
-   ```bash
-   cd backend-server && ./start.sh
-   ```
+## 📁 项目结构
 
-2. **打开 Web 管理后台**
-   - 浏览器访问 http://localhost:8765
-   - 填写操作员 ID 和设备 ID
-   - 点击"创建会话"
-
-3. **运行 Android 应用**
-   - 安装 APK 到手机
-   - 授予所有权限
-   - 连接 Rokid Glasses
-   - 点击"发起呼叫"
-
-4. **开始视频通话**
-   - Web 端接受呼叫
-   - 查看实时视频流
-   - 使用控制按钮（切换摄像头、拍照等）
+```
+Rokid-VideoCall/
+├── 📄 README.md                      # 本文件
+├── 📄 QUICKSTART.md                  # 快速开始指南
+├── 📂 docs/                          # 文档目录
+│   └── 技术方案文档.md                # 详细技术方案
+├── 📂 android-app/                   # Android 客户端
+│   ├── 📄 README.md                  # Android 开发指南
+│   ├── 📂 app/
+│   │   ├── 📂 src/main/
+│   │   │   ├── 📂 java/com/rokid/videocall/
+│   │   │   │   ├── MainActivity.kt   # 主界面
+│   │   │   │   ├── RokidManager.kt   # 设备管理
+│   │   │   │   ├── WebRTCManager.kt  # WebRTC 管理
+│   │   │   │   └── SignalingClient.kt # 信令客户端
+│   │   │   ├── 📂 res/               # 资源文件
+│   │   │   └── AndroidManifest.xml   # 应用配置
+│   │   └── build.gradle.kts          # 构建配置
+│   └── settings.gradle.kts
+├── 📂 backend-server/                # 后端服务器
+│   ├── 📄 start.sh                   # 启动脚本
+│   ├── 📄 requirements.txt           # Python 依赖
+│   ├── 📂 app/
+│   │   ├── main.py                   # FastAPI 入口
+│   │   ├── 📂 signaling/             # 信令处理
+│   │   ├── 📂 webrtc/                # WebRTC 处理
+│   │   └── 📂 models/                # 数据模型
+│   └── 📂 static/
+│       └── index.html                # Web 管理后台
+└──  scripts/                       # 辅助脚本
+```
 
 ---
 
@@ -176,15 +153,6 @@ cd android-app
     "operator_id": "user_123"
   }
 }
-
-// 服务端 → 客户端：呼叫接受
-{
-  "type": "call_accepted",
-  "data": {
-    "session_id": "session_abc123",
-    "sdp": "v=0\r\no=- ..."
-  }
-}
 ```
 
 #### ICE Candidate 交换
@@ -196,27 +164,6 @@ cd android-app
     "sdpMid": "0",
     "sdpMLineIndex": 0
   }
-}
-```
-
-#### 设备控制
-```json
-// 切换摄像头
-{
-  "type": "camera_switch",
-  "data": { "camera": "front" }
-}
-
-// 音量调节
-{
-  "type": "volume_control",
-  "data": { "level": 0.8 }
-}
-
-// 拍照
-{
-  "type": "take_photo",
-  "data": {}
 }
 ```
 
@@ -266,57 +213,7 @@ cd android-app
 
 ---
 
-## 🐛 常见问题
-
-### Q: Android 无法连接到眼镜
-**A**: 
-- 确保眼镜已充电并开机
-- 检查手机蓝牙已开启
-- 确认 CXR-M SDK 已正确集成
-- 查看 Logcat 日志：`adb logcat | grep Rokid`
-
-### Q: WebRTC 连接失败
-**A**:
-- 检查 STUN/TURN 服务器配置
-- 确认防火墙未阻挡 UDP 端口
-- 查看浏览器控制台错误信息
-
-### Q: 视频延迟高
-**A**:
-- 降低视频分辨率（修改 `startCapture` 参数）
-- 使用 WiFi 而非移动数据
-- 检查网络带宽
-
-### Q: 后端服务器无法启动
-**A**:
-```bash
-# 检查 Python 版本
-python3 --version  # 需要 3.10+
-
-# 重新安装依赖
-pip install -r requirements.txt
-
-# 查看错误日志
-cd app && python -m uvicorn main:app --reload
-```
-
----
-
-## 📞 技术支持
-
-### Rokid 官方资源
-- **开发者平台**: https://ar.rokid.com/sdk
-- **开发者论坛**: https://forum.rokid.com
-- **技术文档**: https://ar.rokid.com/docs
-- **联系方式**: developer@rokid.com
-
-### 项目相关
-- **Issues**: [GitHub Issues](https://github.com/your-repo/rokid-videocall/issues)
-- **讨论区**: [GitHub Discussions](https://github.com/your-repo/rokid-videocall/discussions)
-
----
-
-## 📝 开发计划
+## 🗺️ 开发路线图
 
 ### Phase 1: 基础功能 ✅ (已完成)
 - [x] Rokid 设备连接
@@ -344,7 +241,7 @@ cd app && python -m uvicorn main:app --reload
 MIT License
 
 ```
-Copyright (c) 2026 大龙虾 🦞
+Copyright (c) 2026 江翔
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -361,9 +258,18 @@ copies or substantial portions of the Software.
 
 ## 👨‍💻 作者
 
-**大龙虾 🦞**
+**江翔**  
+📧 nju.jiangxiang@gmail.com  
+🔗 [GitHub](https://github.com/njujiangxiang)
 
-AI 眼镜应用开发
+---
+
+## 🔗 相关链接
+
+- 📖 [Rokid 开发者平台](https://ar.rokid.com/sdk)
+- 💬 [Rokid 开发者论坛](https://forum.rokid.com)
+- 📄 [技术方案文档](docs/技术方案文档.md)
+- 🚀 [快速开始指南](QUICKSTART.md)
 
 ---
 

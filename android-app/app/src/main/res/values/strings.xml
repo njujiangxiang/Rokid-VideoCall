@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rokid 视频通话</string>
+    <string name="title_connect">连接眼镜</string>
+    <string name="title_disconnect">断开眼镜</string>
+    <string name="title_start_call">发起呼叫</string>
+    <string name="title_end_call">结束通话</string>
+    <string name="title_switch_camera">切换摄像头</string>
+    <string name="status_connected">已连接 Rokid Glasses</string>
+    <string name="status_disconnected">未连接</string>
+    <string name="status_connecting">正在连接眼镜...</string>
+    <string name="status_calling">呼叫中...</string>
+    <string name="status_in_call">通话中...</string>
+    <string name="permission_required">需要所有权限才能运行</string>
+    <string name="error_connection_failed">连接失败</string>
+    <string name="error_call_failed">呼叫失败</string>
+</resources>

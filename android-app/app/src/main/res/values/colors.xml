@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 主色调 -->
+    <color name="primary">#2196F3</color>       <!-- 蓝色 -->
+    <color name="primary_dark">#1976D2</color>
+    <color name="primary_light">#BBDEFB</color>
+    <color name="accent">#FF5722</color>        <!-- 橙色 -->
+
+    <!-- 次要色 -->
+    <color name="secondary">#4CAF50</color>     <!-- 绿色 -->
+    <color name="secondary_dark">#388E3C</color>
+
+    <!-- 背景色 -->
+    <color name="background">#F5F5F5</color>
+    <color name="surface_background">#FFFFFF</color>
+    <color name="card_background">#FAFAFA</color>
+
+    <!-- 文字颜色 -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_hint">#BDBDBD</color>
+
+    <!-- 状态颜色 -->
+    <color name="status_connected">#4CAF50</color>      <!-- 绿色 -->
+    <color name="status_disconnected">#F44336</color>   <!-- 红色 -->
+    <color name="status_connecting">#FF9800</color>     <!-- 橙色 -->
+    <color name="status_calling">#2196F3</color>        <!-- 蓝色 -->
+
+    <!-- 按钮颜色 -->
+    <color name="call_button">#4CAF50</color>           <!-- 绿色 - 发起呼叫 -->
+    <color name="end_call_button">#F44336</color>       <!-- 红色 - 结束通话 -->
+
+    <!-- 其他 -->
+    <color name="divider">#E0E0E0</color>
+    <color name="transparent">#00000000</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+</resources>

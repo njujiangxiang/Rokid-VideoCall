@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rokid 视频通话 - 管理后台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header .status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-box .number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-box .label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .button.danger {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .session-list {
+            list-style: none;
+        }
+
+        .session-item {
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .session-item:hover {
+            background: #f9f9f9;
+        }
+
+        .session-info {
+            flex: 1;
+        }
+
+        .session-id {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .session-meta {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .session-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .status-created {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+
+        .status-ended {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 */
+            background: #000;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #666;
+            font-size: 18px;
+        }
+
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .log-container {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: "Consolas", "Monaco", monospace;
+            font-size: 13px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+        }
+
+        .log-info { color: #4ec9b0; }
+        .log-warning { color: #ce9178; }
+        .log-error { color: #f44747; }
+        .log-success { color: #6a9955; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>🦞 Rokid Glasses 远程视频连线系统</h1>
+            <div class="status">
+                <div class="status-indicator"></div>
+                <span id="serverStatus">服务器运行中</span>
+                <span id="currentTime" style="margin-left: auto; color: #666;"></span>
+            </div>
+        </div>
+
+        <!-- 统计信息 -->
+        <div class="card">
+            <h2>📊 实时统计</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="number" id="activeSessions">0</div>
+                    <div class="label">活跃会话</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number" id="totalSessions">0</div>
+                    <div class="label">总会话数</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number" id="todayCalls">0</div>
+                    <div class="label">今日通话</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number" id="avgDuration">0s</div>
+                    <div class="label">平均时长</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 创建会话 -->
+        <div class="card">
+            <h2>📱 创建新会话</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end;">
+                <div class="form-group" style="margin: 0;">
+                    <label for="operatorId">操作员 ID</label>
+                    <input type="text" id="operatorId" placeholder="例如：operator_001">
+                </div>
+                <div class="form-group" style="margin: 0;">
+                    <label for="deviceId">设备 ID</label>
+                    <input type="text" id="deviceId" placeholder="例如：ROKID_001">
+                </div>
+                <button class="button" onclick="createSession()">创建会话</button>
+            </div>
+        </div>
+
+        <!-- 视频通话区域 -->
+        <div class="card">
+            <h2>📹 视频通话</h2>
+            <div class="video-container">
+                <video id="remoteVideo" autoplay playsinline></video>
+                <div class="placeholder" id="videoPlaceholder">等待视频连接...</div>
+            </div>
+            <div class="control-panel">
+                <button class="button" id="btnStartCall" onclick="startCall()"> 发起呼叫</button>
+                <button class="button danger" id="btnEndCall" onclick="endCall()" disabled>❌ 结束通话</button>
+                <button class="button" onclick="switchCamera()">🔄 切换摄像头</button>
+                <button class="button" onclick="takePhoto()">📷 拍照</button>
+                <button class="button" onclick="toggleMute()">🎤 静音/取消静音</button>
+            </div>
+        </div>
+
+        <!-- 会话列表 -->
+        <div class="card">
+            <h2>📋 会话列表</h2>
+            <button class="button" onclick="loadSessions()" style="margin-bottom: 15px;">🔄 刷新列表</button>
+            <ul class="session-list" id="sessionList">
+                <li class="session-item">
+                    <div class="session-info">
+                        <div class="session-id">暂无会话</div>
+                        <div class="session-meta">点击"创建新会话"开始</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 日志 -->
+        <div class="card">
+            <h2>📝 系统日志</h2>
+            <div class="log-container" id="logContainer">
+                <div class="log-entry log-info">[系统] 管理后台已加载</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 全局变量 ====================
+        let ws = null;
+        let peerConnection = null;
+        let currentSessionId = null;
+        let localStream = null;
+        let isMuted = false;
+
+        const API_BASE = '/api';
+        const WS_URL = `ws://${window.location.host}/ws/signaling`;
+
+        // ==================== 初始化 ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+            loadStats();
+            loadSessions();
+        });
+
+        function updateCurrentTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = 
+                now.toLocaleString('zh-CN', { 
+                    year: 'numeric', 
+                    month: '2-digit', 
+                    day: '2-digit', 
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    second: '2-digit' 
+                });
+        }
+
+        // ==================== API 调用 ====================
+        async function apiRequest(endpoint, options = {}) {
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    ...options,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                log(`API 请求失败：${error.message}`, 'error');
+                throw error;
+            }
+        }
+
+        // ==================== 会话管理 ====================
+        async function createSession() {
+            const operatorId = document.getElementById('operatorId').value;
+            const deviceId = document.getElementById('deviceId').value;
+
+            if (!operatorId || !deviceId) {
+                alert('请填写操作员 ID 和设备 ID');
+                return;
+            }
+
+            try {
+                const session = await apiRequest('/sessions', {
+                    method: 'POST',
+                    body: JSON.stringify({ operator_id: operatorId, device_id: deviceId })
+                });
+
+                currentSessionId = session.session_id;
+                log(`会话创建成功：${session.session_id}`, 'success');
+                loadSessions();
+                connectWebSocket(session.session_id);
+            } catch (error) {
+                alert(`创建失败：${error.message}`);
+            }
+        }
+
+        async function loadSessions() {
+            try {
+                const sessions = await apiRequest('/sessions?limit=10');
+                renderSessions(sessions);
+                updateStats({ totalSessions: sessions.length });
+            } catch (error) {
+                log(`加载会话列表失败：${error.message}`, 'error');
+            }
+        }
+
+        function renderSessions(sessions) {
+            const list = document.getElementById('sessionList');
+            
+            if (sessions.length === 0) {
+                list.innerHTML = `
+                    <li class="session-item">
+                        <div class="session-info">
+                            <div class="session-id">暂无会话</div>
+                            <div class="session-meta">点击"创建新会话"开始</div>
+                        </div>
+                    </li>
+                `;
+                return;
+            }
+
+            list.innerHTML = sessions.map(session => `
+                <li class="session-item">
+                    <div class="session-info">
+                        <div class="session-id">${session.session_id}</div>
+                        <div class="session-meta">
+                            操作员：${session.operator_id} | 
+                            设备：${session.device_id} | 
+                            创建：${new Date(session.created_at).toLocaleString()}
+                        </div>
+                    </div>
+                    <span class="session-status status-${session.status}">${session.status}</span>
+                </li>
+            `).join('');
+        }
+
+        // ==================== WebSocket 连接 ====================
+        function connectWebSocket(sessionId) {
+            if (ws) {
+                ws.close();
+            }
+
+            ws = new WebSocket(`${WS_URL}/${sessionId}`);
+
+            ws.onopen = () => {
+                log('WebSocket 已连接', 'success');
+            };
+
+            ws.onmessage = (event) => {
+                const message = JSON.parse(event.data);
+                handleSignalingMessage(message);
+            };
+
+            ws.onclose = () => {
+                log('WebSocket 已断开', 'warning');
+            };
+
+            ws.onerror = (error) => {
+                log(`WebSocket 错误：${error}`, 'error');
+            };
+        }
+
+        function handleSignalingMessage(message) {
+            log(`收到信令：${message.type}`, 'info');
+
+            switch (message.type) {
+                case 'call_starting':
+                    log('呼叫已发起，等待接受...', 'info');
+                    break;
+                case 'call_accepted':
+                    log('呼叫已接受', 'success');
+                    break;
+                case 'call_end':
+                    log(`呼叫结束：${message.data.reason}`, 'warning');
+                    endCall();
+                    break;
+                case 'ice_candidate':
+                    handleIceCandidate(message.data);
+                    break;
+            }
+        }
+
+        // ==================== WebRTC ====================
+        async function startCall() {
+            if (!currentSessionId) {
+                alert('请先创建会话');
+                return;
+            }
+
+            try {
+                // 获取本地媒体流
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: true
+                });
+
+                // 创建 PeerConnection
+                peerConnection = new RTCPeerConnection({
+                    iceServers: [
+                        { urls: 'stun:stun.l.google.com:19302' },
+                        { urls: 'stun:stun1.l.google.com:19302' }
+                    ]
+                });
+
+                // 添加本地轨道
+                localStream.getTracks().forEach(track => {
+                    peerConnection.addTrack(track, localStream);
+                });
+
+                // 处理远端轨道
+                peerConnection.ontrack = (event) => {
+                    const video = document.getElementById('remoteVideo');
+                    video.srcObject = event.streams[0];
+                    document.getElementById('videoPlaceholder').style.display = 'none';
+                    log('远端视频流已添加', 'success');
+                };
+
+                // 处理 ICE Candidate
+                peerConnection.onicecandidate = (event) => {
+                    if (event.candidate) {
+                        sendSignaling({
+                            type: 'ice_candidate',
+                            data: {
+                                candidate: event.candidate.candidate,
+                                sdpMid: event.candidate.sdpMid,
+                                sdpMLineIndex: event.candidate.sdpMLineIndex
+                            }
+                        });
+                    }
+                };
+
+                // 创建 Offer
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+
+                // 发送 Offer
+                sendSignaling({
+                    type: 'call_start',
+                    data: {
+                        sdp: offer.sdp,
+                        type: offer.type,
+                        device_id: document.getElementById('deviceId').value,
+                        operator_id: document.getElementById('operatorId').value
+                    }
+                });
+
+                // 更新 UI
+                document.getElementById('btnStartCall').disabled = true;
+                document.getElementById('btnEndCall').disabled = false;
+                log('呼叫已发起', 'success');
+
+            } catch (error) {
+                log(`发起呼叫失败：${error.message}`, 'error');
+                alert(`发起呼叫失败：${error.message}`);
+            }
+        }
+
+        function endCall() {
+            if (ws) {
+                sendSignaling({
+                    type: 'call_end',
+                    data: { reason: 'user_hangup' }
+                });
+            }
+
+            if (peerConnection) {
+                peerConnection.close();
+                peerConnection = null;
+            }
+
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                localStream = null;
+            }
+
+            document.getElementById('remoteVideo').srcObject = null;
+            document.getElementById('videoPlaceholder').style.display = 'block';
+            document.getElementById('btnStartCall').disabled = false;
+            document.getElementById('btnEndCall').disabled = true;
+            log('通话已结束', 'warning');
+        }
+
+        function handleIceCandidate(data) {
+            if (peerConnection) {
+                peerConnection.addIceCandidate(new RTCIceCandidate({
+                    candidate: data.candidate,
+                    sdpMid: data.sdpMid,
+                    sdpMLineIndex: data.sdpMLineIndex
+                }));
+            }
+        }
+
+        function sendSignaling(message) {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify(message));
+            } else {
+                log('WebSocket 未连接，无法发送信令', 'error');
+            }
+        }
+
+        // ==================== 控制功能 ====================
+        function switchCamera() {
+            sendSignaling({
+                type: 'camera_switch',
+                data: { camera: 'front' }
+            });
+            log('已发送切换摄像头指令', 'info');
+        }
+
+        function takePhoto() {
+            sendSignaling({
+                type: 'take_photo',
+                data: {}
+            });
+            log('已发送拍照指令', 'info');
+        }
+
+        function toggleMute() {
+            if (localStream) {
+                const audioTrack = localStream.getAudioTracks()[0];
+                if (audioTrack) {
+                    audioTrack.enabled = !audioTrack.enabled;
+                    isMuted = !audioTrack.enabled;
+                    log(isMuted ? '已静音' : '已取消静音', 'info');
+                }
+            }
+        }
+
+        // ==================== 统计信息 ====================
+        async function loadStats() {
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                
+                document.getElementById('activeSessions').textContent = data.active_sessions;
+                document.getElementById('totalSessions').textContent = data.total_sessions;
+            } catch (error) {
+                log(`加载统计失败：${error.message}`, 'error');
+            }
+        }
+
+        function updateStats(stats) {
+            if (stats.totalSessions) {
+                document.getElementById('totalSessions').textContent = stats.totalSessions;
+            }
+        }
+
+        // ==================== 日志功能 ====================
+        function log(message, type = 'info') {
+            const container = document.getElementById('logContainer');
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${timestamp}] ${message}`;
+            container.appendChild(entry);
+            container.scrollTop = container.scrollHeight;
+
+            // 限制日志条数
+            while (container.children.length > 100) {
+                container.removeChild(container.firstChild);
+            }
+        }
+    </script>
+</body>
+</html>

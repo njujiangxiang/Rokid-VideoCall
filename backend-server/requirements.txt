@@ -1,0 +1,26 @@
+# Rokid VideoCall Server - Python 依赖
+
+# Web 框架
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+
+# WebSocket
+websockets==12.0
+
+# WebRTC (可选，用于后端媒体处理)
+aiortc==1.7.0
+
+# 数据序列化
+pydantic==2.5.3
+
+# 工具库
+python-dotenv==1.0.0
+
+# 数据库（生产环境使用）
+# psycopg2-binary==2.9.9  # PostgreSQL
+# sqlalchemy==2.0.25
+
+# 测试
+pytest==7.4.4
+pytest-asyncio==0.23.3
